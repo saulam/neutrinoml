@@ -32,7 +32,8 @@ def plot_event(df, event_n):
     ax.set_xlim(min_x, max_x)
     ax.set_ylim(min_z, max_z)
     ax.set_zlim(min_y, max_y)
-    ax.set_box_aspect((abs(max_x-min_x), abs(max_z-min_z), abs(max_y-min_y)))
+    ax.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
+    #ax.set_box_aspect((abs(max_x-min_x), abs(max_z-min_z), abs(max_y-min_y)))
     
     plt.title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum))
     plt.show()
