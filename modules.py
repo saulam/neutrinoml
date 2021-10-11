@@ -164,3 +164,23 @@ def plot_logistic_regression(log_reg, X, y, param_names, y_names):
 
     plt.tight_layout()
     plt.show()
+
+def print_conf(conf, target_names):
+    assert len(target_names) == conf.shape[0]
+
+    for i in range(len(target_names)+1):
+        for j in range(len(target_names)+1):
+            if i==0:
+                if j==0:
+                    print("\t\t", end = '')
+                elif j<=len(target_names)-1:
+                    print("True {}\t".format(target_names[j-1]), end = '')
+                else:
+                    print("True {}".format(target_names[j-1]))
+            else:
+                if j==0:
+                    print("Pred {}\t".format(target_names[i-1]), end = '')
+                elif j<=len(target_names)-1:
+                    print("{:>{x}}\t".format(conf[i-1,j-1], x=5+len(target_names[j-1])), end = '')
+                else:
+                    print("{:>{x}}".format(conf[i-1,j-1], x=5+len(target_names[j-1])))
