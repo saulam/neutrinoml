@@ -39,7 +39,7 @@ def plot_event(df, event_n):
     plt.show()
 
 def plot_parameters(X, y, names, mode="reg"):
-    if mode="reg":
+    if mode=="reg":
         n_params = len(names)-1
         rows = math.floor(math.sqrt(n_params))
         cols = math.ceil(math.sqrt(n_params))
