@@ -54,6 +54,19 @@ def plot_parameters(X, y, names):
     plt.tight_layout()
     plt.show()
 
+def plot_params_pid(X, y, param_names, y_names):
+    fig = plt.figure(figsize=(5, 3))
+    
+    ax1 = plt.subplot(1,1,1)
+    ax1.scatter(X[y==0,0], X[y==0,1], c="b", s=1, label=y_names[0])
+    ax1.scatter(X[y==1,0], X[y==1,1], c="r", s=1, label=y_names[1])
+    ax1.set_xlabel(param_names[0])
+    ax1.set_ylabel(param_names[1])
+    plt.legend()
+
+    plt.tight_layout()
+    plt.show()
+
 def plot_regression(X, y, reg, names, degree=None):
     min_x = np.min(X)
     max_x = np.max(X)
