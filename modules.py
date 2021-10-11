@@ -38,9 +38,9 @@ def plot_event(df, event_n):
     plt.title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum))
     plt.show()
 
-def plot_parameters(X, y, names, mode="reg"):
+def plot_parameters(X, y, param_names, y_names, mode="reg"):
     if mode=="reg":
-        n_params = len(names)-1
+        n_params = len(param_names)-1
         rows = math.floor(math.sqrt(n_params))
         cols = math.ceil(math.sqrt(n_params))
     
@@ -49,8 +49,8 @@ def plot_parameters(X, y, names, mode="reg"):
         for i in range(n_params):
             ax1 = plt.subplot(rows,cols,i+1)
             ax1.scatter(X[:,i], y, s=1)
-            ax1.set_xlabel(names[i+1])
-            ax1.set_ylabel(names[0])
+            ax1.set_xlabel(param_names[i+1])
+            ax1.set_ylabel(param_names[0])
     else:
         n_params = len(param_names)
         rows = math.floor(math.sqrt(n_params))
