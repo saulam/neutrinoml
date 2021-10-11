@@ -119,3 +119,35 @@ def plot_distributions(X, y, y_pred):
 
     plt.tight_layout()
     plt.show()
+
+def plot_logistic_regression(log_reg, X, y, param_names, y_names):
+    min_x = np.amin(X, axis=0)
+    max_x = np.amax(X, axis=0)
+
+    fig = plt.figure(figsize=(10, 3))
+
+    ax1 = plt.subplot(1,2,1)
+    ax1.scatter(X[y==0,0], X[y==0,1], c="b", s=1, label=y_names[0])
+    ax1.scatter(X[y==1,0], X[y==1,1], c="r", s=1, label=y_names[1])
+    line = np.linspace(min_x[0], max_x[0])
+    ax1.plot(line, -(line * clf.coef_[0][0] + clf.intercept_) / clf.coef_[0][1], c='lime', linewidth=5, label="separation")
+    ax1.set_xlabel(param_names[0])
+    ax1.set_ylabel(param_names[1])
+    ax1.set_xlim(min_x[0], max_x[0])
+    ax1.set_ylim(min_x[1], max_x[1])
+
+    plt.legend()
+
+    ax2 = plt.subplot(1,2,2)
+    xx, yy = np.meshgrid(np.linspace(min_x[0], max_x[0]), np.linspace(min_x[1], max_x[1]))
+    Z = clf.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:,0]
+    Z = Z.reshape(xx.shape)
+    ax2.pcolormesh(xx, yy, Z, cmap=plt.cm.bwr_r)
+    ax2.scatter(X[:,0], X[:,1], c='w', marker='x')
+    ax2.set_xlabel(param_names[0])
+    ax2.set_ylabel(param_names[1])
+    ax2.set_xlim(min_x[0], max_x[0])
+    ax2.set_ylim(min_x[1], max_x[1])
+
+    plt.tight_layout()
+    plt.show()
