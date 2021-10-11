@@ -38,18 +38,37 @@ def plot_event(df, event_n):
     plt.title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum))
     plt.show()
 
-def plot_parameters(X, y, names):
-    n_params = len(names)-1
-    rows = math.floor(math.sqrt(n_params))
-    cols = math.ceil(math.sqrt(n_params))
+def plot_parameters(X, y, names, mode="reg"):
+    if mode="reg":
+        n_params = len(names)-1
+        rows = math.floor(math.sqrt(n_params))
+        cols = math.ceil(math.sqrt(n_params))
     
-    fig = plt.figure(figsize=(cols*5, rows*3))
+        fig = plt.figure(figsize=(cols*5, rows*3))
 
-    for i in range(n_params):
-        ax1 = plt.subplot(rows,cols,i+1)
-        ax1.scatter(X[:,i], y, s=1)
-        ax1.set_xlabel(names[i+1])
-        ax1.set_ylabel(names[0])
+        for i in range(n_params):
+            ax1 = plt.subplot(rows,cols,i+1)
+            ax1.scatter(X[:,i], y, s=1)
+            ax1.set_xlabel(names[i+1])
+            ax1.set_ylabel(names[0])
+    else:
+        n_params = len(param_names)
+        rows = math.floor(math.sqrt(n_params))
+        cols = math.ceil(math.sqrt(n_params))
+
+        fig = plt.figure(figsize=(cols*5, rows*3))
+
+        for i in range(n_params):
+            X0 = X[y==0,i]
+            X1 = X[y==1,i]
+            X0 = X0[X0!=-1]
+            X1 = X1[X1!=-1]
+            ax1 = plt.subplot(rows,cols,i+1)
+            ax1.hist(X0, bins=50, histtype='step', label=y_names[0])
+            ax1.hist(X1, bins=50, histtype='step', label=y_names[1])
+            ax1.set_xlabel(param_names[i])
+            ax1.set_ylabel("frequency")
+            plt.legend()
 
     plt.tight_layout()
     plt.show()
