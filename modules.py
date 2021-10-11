@@ -184,6 +184,17 @@ def plot_logistic_regression(log_reg, X, y, param_names, y_names):
     plt.tight_layout()
     plt.show()
 
+def plot_sigmoid():
+    sigmoid = lambda x: 1 / (1 + np.exp(-x))
+    x = np.linspace(-10,10,100)
+    y = sigmoid(x)
+
+    fig = plt.figure(figsize=(5, 3))
+    plt.plot(x,y)
+    plt.xlabel('z')
+    plt.ylabel('sigmoid(z)')
+    plt.show()
+
 def print_conf(conf, target_names):
     assert len(target_names) == conf.shape[0]
 
