@@ -66,6 +66,10 @@ def plot_parameters(X, y, param_names, y_names, mode="reg"):
             ax1 = plt.subplot(rows,cols,i+1)
             ax1.hist(X0, bins=50, histtype='step', label=y_names[0])
             ax1.hist(X1, bins=50, histtype='step', label=y_names[1])
+            if len(y_names)>2:
+                X2 = X[y==2,i]
+                X2 = X2[X2!=-1]
+                ax1.hist(X2, bins=50, histtype='step', label=y_names[2])
             ax1.set_xlabel(param_names[i])
             ax1.set_ylabel("frequency")
             plt.legend()
