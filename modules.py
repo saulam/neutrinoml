@@ -218,3 +218,69 @@ def print_conf(conf, target_names):
                     print("{:>{x}}\t".format(conf[i-1,j-1], x=5+len(target_names[j-1])), end = '')
                 else:
                     print("{:>{x}}".format(conf[i-1,j-1], x=5+len(target_names[j-1])))
+
+def plot_projection(df, event_n, Xf):
+    event = df.iloc[event_n]
+    pid = event['TruePID']
+    momentum = event['TrueMomentum']
+    X = event['NodePosX']
+    Y = event['NodePosY']
+    Z = event['NodePosZ']
+    
+    # ranges of the detector
+    min_x = -985.92
+    max_x = 985.92
+    min_y = -257.56
+    max_y = 317.56
+    min_z = -2888.78
+    max_z = -999.1
+    
+    fig = plt.figure(figsize=(15, 5))
+    ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+    ax1.scatter(X, Z, Y)
+    ax1.set_xlabel('X (mm)', labelpad=8)
+    ax1.set_xticks([-900, -600, -300, 0, 300, 600, 900])
+    ax1.set_ylabel('Z (mm)', labelpad=10)
+    ax1.set_yticks([-2750, -2250, -1750, -1250])
+    ax1.set_zlabel('Y (mm)', labelpad=5)
+    ax1.set_zticks([-300, -150, 0, 150, 300])
+    ax1.set_xlim(min_x, max_x)
+    ax1.set_ylim(min_z, max_z)
+    ax1.set_zlim(min_y, max_y)
+    ax1.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
+    ax1.view_init(elev=10, azim=-30)
+
+    ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+    ax2.scatter(X, Z, Y)
+    ax2.set_xlabel('X (mm)', labelpad=8)
+    ax2.set_xticks([-900, -600, -300, 0, 300, 600, 900])
+    ax2.set_ylabel('Z (mm)', labelpad=10)
+    ax2.set_yticks([-2750, -2250, -1750, -1250])
+    ax2.set_zlabel('Y (mm)', labelpad=5)
+    ax2.set_zticks([-300, -150, 0, 150, 300])
+    ax2.set_xlim(min_x, max_x)
+    ax2.set_ylim(min_z, max_z)
+    ax2.set_zlim(min_y, max_y)
+    ax2.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
+    ax2.view_init(elev=10, azim=30)
+  
+    ax1.set_title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum), loc='center')
+    plt.show()     
+
+    cmap = plt.cm.get_cmap("Reds")
+    cmap.set_bad(color='white')
+
+    # mask some 'bad' data, in your case you would have: data == 0
+    cand_image = np.ma.masked_where(Xf[cand] == 0.0, Xf[cand])
+
+    plt.matshow(cand_image.reshape(58,189), cmap=cmap)
+    plt.xlabel("Z [cm]")
+    plt.ylabel("Y [cm]")
+
+    #plt.title(r'{0} sample: N={1}, $\mu={2:.2f}$, $\sigma={3:.2f}$'.format(prefix, len(distances), np.mean(distances), np.std(distances)))
+    cbar = plt.colorbar()
+    cbar.ax.get_yaxis().labelpad = 15
+    cbar.ax.set_ylabel('frequency',fontsize=10, rotation=90)
+    plt.title("YZ projection", y=1.15)
+    plt.gca().invert_yaxis()
+    plt.show()
