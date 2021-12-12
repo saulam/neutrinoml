@@ -271,7 +271,7 @@ def plot_projection(df, event_n, Xf):
     cmap.set_bad(color='white')
 
     # mask some 'bad' data, in your case you would have: data == 0
-    cand_image = np.ma.masked_where(Xf[cand] == 0.0, Xf[cand])
+    cand_image = np.ma.masked_where(Xf[event_n] == 0.0, Xf[event_n])
 
     plt.matshow(cand_image.reshape(58,189), cmap=cmap)
     plt.xlabel("Z [cm]")
