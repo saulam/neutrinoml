@@ -280,7 +280,7 @@ def plot_projection(df, event_n, Xf):
     #plt.title(r'{0} sample: N={1}, $\mu={2:.2f}$, $\sigma={3:.2f}$'.format(prefix, len(distances), np.mean(distances), np.std(distances)))
     cbar = plt.colorbar()
     cbar.ax.get_yaxis().labelpad = 15
-    cbar.ax.set_ylabel('frequency',fontsize=10, rotation=90)
+    cbar.ax.set_ylabel('dedx',fontsize=10, rotation=90)
     plt.title("YZ projection", y=1.15)
     plt.gca().invert_yaxis()
     plt.show()
