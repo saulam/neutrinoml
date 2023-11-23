@@ -4,7 +4,19 @@ import math
 from mpl_toolkits.mplot3d import Axes3D
 from sklearn.preprocessing import scale, PolynomialFeatures
 
+def map_value(y,z):
+    min_y = -257.56
+    max_y = 317.56
+    min_z = -2888.78
+    max_z = -999.1
+
+    y = int((y-min_y)//10)
+    z = int((z-min_z)//10)
+
+    return y, z
+
 def plot_event(df, event_n):
+    # Extracting data for the event
     event = df.iloc[event_n]
     pid = event['TruePID']
     momentum = event['TrueMomentum']
@@ -12,30 +24,43 @@ def plot_event(df, event_n):
     Y = event['NodePosY']
     Z = event['NodePosZ']
     
-    # ranges of the detector
-    min_x = -985.92
-    max_x = 985.92
-    min_y = -257.56
-    max_y = 317.56
-    min_z = -2888.78
-    max_z = -999.1
+    # Ranges of the detector
+    min_x, max_x = -985.92, 985.92
+    min_y, max_y = -257.56, 317.56
+    min_z, max_z = -2888.78, -999.1
     
+    # Create a figure and 3D axis
     fig = plt.figure()
-    ax = Axes3D(fig)
-    ax.scatter(X, Z, Y)
-    ax.set_xlabel('X (mm)', labelpad=8)
-    ax.set_xticks([-900, -600, -300, 0, 300, 600, 900])
-    ax.set_ylabel('Z (mm)', labelpad=10)
-    ax.set_yticks([-2750, -2250, -1750, -1250])
-    ax.set_zlabel('Y (mm)', labelpad=5)
-    ax.set_zticks([-300, -150, 0, 150, 300])
+    ax = fig.add_subplot(111, projection='3d')
+    
+    # Scatter plot
+    ax.scatter(X, Z, Y, marker='o', s=20, c='b', label='Data Points')
+    
+    # Set axis labels and ticks
+    ax.set_xlabel('X (mm)')
+    ax.set_ylabel('Z (mm)')
+    ax.set_zlabel('Y (mm)')
+    
+    # Set axis limits
     ax.set_xlim(min_x, max_x)
     ax.set_ylim(min_z, max_z)
     ax.set_zlim(min_y, max_y)
-    ax.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
-    #ax.set_box_aspect((abs(max_x-min_x), abs(max_z-min_z), abs(max_y-min_y)))
     
+    # Set axis ticks
+    ax.set_xticks([-900, -600, -300, 0, 300, 600, 900])
+    ax.set_yticks([-2750, -2250, -1750, -1250])
+    ax.set_zticks([-300, -150, 0, 150, 300])
+    
+    # Auto scale the axis
+    ax.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
+    
+    # Set plot title
     plt.title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum))
+    
+    # Add a legend
+    ax.legend()
+    
+    # Show the plot
     plt.show()
 
 def plot_parameters(X, y, param_names, y_names, mode="reg"):
@@ -117,27 +142,27 @@ def plot_distributions(X, y, y_pred):
     ax1 = plt.subplot(321)
     ax1.hist(y, bins=100, range=(x_min,x_max))
     ax1.title.set_text('Original')
-    ax1.set_xlabel('momentum (MeV)')
+    ax1.set_xlabel('momentum [MeV/c]')
     ax1.set_ylabel('frequency')
 
     ax2 = plt.subplot(322)
     ax2.hist(y, bins=100, range=(x_min,x_max))
     ax2.set_yscale('log')
     ax2.title.set_text('Original (log-scale)')
-    ax2.set_xlabel('momentum (MeV)')
+    ax2.set_xlabel('momentum [MeV/c]')
     ax2.set_ylabel('frequency')
 
     ax3 = plt.subplot(323, sharex=ax1, sharey=ax1)
     ax3.hist(y_pred, bins=100)
     ax3.title.set_text('Predicted')
-    ax3.set_xlabel('momentum (MeV)')
+    ax3.set_xlabel('momentum [MeV/c]')
     ax3.set_ylabel('frequency')
 
     ax4 = plt.subplot(324, sharex=ax2, sharey=ax2)
     ax4.hist(y_pred, bins=100)
     ax4.set_yscale('log')
     ax4.title.set_text('Predicted (log-scale)')
-    ax4.set_xlabel('momentum (MeV)')
+    ax4.set_xlabel('momentum [MeV/c]')
     ax4.set_ylabel('frequency')
 
     difference = y-y_pred
@@ -238,11 +263,11 @@ def plot_projection(df, event_n, Xf):
     fig = plt.figure(figsize=(15, 5))
     ax1 = fig.add_subplot(1, 2, 1, projection='3d')
     ax1.scatter(X, Z, Y)
-    ax1.set_xlabel('X (mm)', labelpad=8)
+    ax1.set_xlabel('X [mm]', labelpad=8)
     ax1.set_xticks([-900, -600, -300, 0, 300, 600, 900])
-    ax1.set_ylabel('Z (mm)', labelpad=10)
+    ax1.set_ylabel('Z [mm]', labelpad=10)
     ax1.set_yticks([-2750, -2250, -1750, -1250])
-    ax1.set_zlabel('Y (mm)', labelpad=5)
+    ax1.set_zlabel('Y [mm]', labelpad=5)
     ax1.set_zticks([-300, -150, 0, 150, 300])
     ax1.set_xlim(min_x, max_x)
     ax1.set_ylim(min_z, max_z)
@@ -252,11 +277,11 @@ def plot_projection(df, event_n, Xf):
 
     ax2 = fig.add_subplot(1, 2, 2, projection='3d')
     ax2.scatter(X, Z, Y)
-    ax2.set_xlabel('X (mm)', labelpad=8)
+    ax2.set_xlabel('X [mm]', labelpad=8)
     ax2.set_xticks([-900, -600, -300, 0, 300, 600, 900])
-    ax2.set_ylabel('Z (mm)', labelpad=10)
+    ax2.set_ylabel('Z [mm]', labelpad=10)
     ax2.set_yticks([-2750, -2250, -1750, -1250])
-    ax2.set_zlabel('Y (mm)', labelpad=5)
+    ax2.set_zlabel('Y [mm]', labelpad=5)
     ax2.set_zticks([-300, -150, 0, 150, 300])
     ax2.set_xlim(min_x, max_x)
     ax2.set_ylim(min_z, max_z)
@@ -264,7 +289,7 @@ def plot_projection(df, event_n, Xf):
     ax2.auto_scale_xyz([min_x, max_x], [min_z, max_z], [min_y, max_y])
     ax2.view_init(elev=10, azim=30)
   
-    ax1.set_title('Event {0}. PID: {1}, momentum: {2:.3f} MeV'.format(event_n, pid, momentum), loc='center')
+    ax1.set_title('Event {0}. PID: {1}, momentum: {2:.3f} [MeV/c]'.format(event_n, pid, momentum), loc='center')
     plt.show()     
 
     cmap = plt.cm.get_cmap("Reds")
